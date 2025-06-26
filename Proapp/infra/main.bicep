@@ -1,4 +1,4 @@
-targetScope = 'subscription'
+targetScope = 'resourceGroup'
 
 @minLength(1)
 @maxLength(64)
@@ -9,7 +9,6 @@ param environmentName string
 @description('Primary location for all resources')
 param location string
 
-param resourceGroupName string = ''
 param containerAppsEnvironmentName string = ''
 param containerRegistryName string = ''
 param webAppName string = 'webapp'
@@ -87,28 +86,28 @@ var indexerApiIdentityName = '${abbrs.managedIdentityUserAssignedIdentities}inde
 var searchApiIdentityName = '${abbrs.managedIdentityUserAssignedIdentities}search-api-${resourceToken}'
 
 // Organize resources in a resource group
-resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: !empty(resourceGroupName) ? resourceGroupName : '${abbrs.resourcesResourceGroups}${environmentName}'
-  location: location
-  tags: tags
-}
+// Removed resource group creation as it is not valid at resourceGroup scope.
+// Ensure the resource group exists before deploying this template.
 
 resource openAiResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' existing = if (!empty(openAiResourceGroupName)) {
-  name: !empty(openAiResourceGroupName) ? openAiResourceGroupName : resourceGroup.name
+  scope: subscription()
+  name: openAiResourceGroupName
 }
 
 resource searchServiceResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' existing = if (!empty(searchServiceResourceGroupName)) {
-  name: !empty(searchServiceResourceGroupName) ? searchServiceResourceGroupName : resourceGroup.name
+  scope: subscription()
+  name: !empty(searchServiceResourceGroupName) ? searchServiceResourceGroupName : resourceGroup().name
 }
 
 resource storageResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' existing = if (!empty(storageResourceGroupName)) {
-  name: !empty(storageResourceGroupName) ? storageResourceGroupName : resourceGroup.name
+  scope: subscription()
+  name: !empty(storageResourceGroupName) ? storageResourceGroupName : resourceGroup().name
 }
 
 // Monitor application with Azure Monitor
 module monitoring './core/monitor/monitoring.bicep' = {
   name: 'monitoring'
-  scope: resourceGroup
+  scope: resourceGroup()
   params: {
     location: location
     tags: tags
@@ -121,7 +120,7 @@ module monitoring './core/monitor/monitoring.bicep' = {
 // Container apps host (including container registry)
 module containerApps './core/host/container-apps.bicep' = {
   name: 'container-apps'
-  scope: resourceGroup
+  scope: resourceGroup()
   params: {
     name: 'containerapps'
     containerAppsEnvironmentName: !empty(containerAppsEnvironmentName) ? containerAppsEnvironmentName : '${abbrs.appManagedEnvironments}${resourceToken}'
@@ -137,7 +136,7 @@ module containerApps './core/host/container-apps.bicep' = {
 // The application frontend
 module webApp './core/host/staticwebapp.bicep' = {
   name: 'webapp'
-  scope: resourceGroup
+  scope: resourceGroup()
   params: {
     name: !empty(webAppName) ? webAppName : '${abbrs.webStaticSites}web-${resourceToken}'
     location: webAppLocation
@@ -148,7 +147,7 @@ module webApp './core/host/staticwebapp.bicep' = {
 // search API identity
 module searchApiIdentity 'core/security/managed-identity.bicep' = {
   name: 'search-api-identity'
-  scope: resourceGroup
+  scope: resourceGroup()
   params: {
     name: searchApiIdentityName
     location: location
@@ -158,7 +157,7 @@ module searchApiIdentity 'core/security/managed-identity.bicep' = {
 // The search API
 module searchApi './core/host/container-app.bicep' = {
   name: 'search-api'
-  scope: resourceGroup
+  scope: resourceGroup()
   params: {
     name: !empty(searchApiName) ? searchApiName : '${abbrs.appContainerApps}search-${resourceToken}'
     location: location
@@ -229,7 +228,7 @@ module searchApi './core/host/container-app.bicep' = {
 // Indexer API identity
 module indexerApiIdentity 'core/security/managed-identity.bicep' = {
   name: 'indexer-api-identity'
-  scope: resourceGroup
+  scope: resourceGroup()
   params: {
     name: indexerApiIdentityName
     location: location
@@ -239,7 +238,7 @@ module indexerApiIdentity 'core/security/managed-identity.bicep' = {
 // The indexer API
 module indexerApi './core/host/container-app.bicep' = {
   name: 'indexer-api'
-  scope: resourceGroup
+  scope: resourceGroup()
   params: {
     name: !empty(indexerApiName) ? indexerApiName : '${abbrs.appContainerApps}indexer-${resourceToken}'
     location: location
@@ -511,7 +510,7 @@ module searchSvcContribRoleIndexerApi 'core/security/role.bicep' = {
 
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
-output AZURE_RESOURCE_GROUP string = resourceGroup.name
+output AZURE_RESOURCE_GROUP string = resourceGroup().name
 
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = containerApps.outputs.registryLoginServer
 output AZURE_CONTAINER_REGISTRY_NAME string = containerApps.outputs.registryName
