@@ -1,0 +1,64 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #f0f0f0;
+    padding: 20px;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.backpack-section {
+    background-color: #ffffff;
+    padding: 20px;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.backpack-image {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 20px;
+}
+
+.backpack-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.adventurer-pro-backpack,
+.summit-climber-backpack,
+.trail-lite-daypack {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+}
+
+.adventurer-pro-backpack h3,
+.summit-climber-backpack h3,
+.trail-lite-daypack h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.adventurer-pro-backpack p,
+.summit-climber-backpack p,
+.trail-lite-daypack p {
+    font-size: 16px;
+    color: #666666;
+}
