@@ -1,3 +1,7 @@
+// This is a snippet for a code review task using a GenAI model.import { $ } from "execa";
+// This is a code review task that uses the GenAI model to analyze code changes made in a Git repository.
+import { defDiff } from "genai";
+
 const changes = await git.diff({ staged: true });
 
 defDiff("CODE_CHANGES", changes);
