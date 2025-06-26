@@ -5,6 +5,7 @@
     "@azure/core-auth": "latest",
     "@azure/core-sse": "latest",
     "dotenv": "^16.5.0",
-    "nodeenv": "^3.0.75"
+    "nodeenv": "^3.0.75",
+    "pdf-parse": "^1.1.1"
   }
 }
