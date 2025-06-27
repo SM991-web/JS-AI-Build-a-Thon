@@ -50,7 +50,7 @@ module webapp 'br/public:avm/res/web/static-site:0.7.0' = {
     name: webappName
     location: webappLocation
     tags: union(tags, { 'azd-service-name': webappName })
-    sku: 'Standard'
+    sku: 'Free'
   }
 }
 module serverfarm 'br/public:avm/res/web/serverfarm:0.4.1' = {
