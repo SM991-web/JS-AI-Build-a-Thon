@@ -1,8 +1,21 @@
+# Compiled output
+node_modules/
+dist/
+.tmp/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Deployment
+*.env
 .azure
 
-.dist
-node_modules
-package-lock.json
-.vscode
-
-.env
+# Misc
+.DS_Store
+Thumbs.db
+TODO
