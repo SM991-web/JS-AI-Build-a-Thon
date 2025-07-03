@@ -6,8 +6,8 @@ dotenv.config();
 
 // Setup client
 const client = new ModelClient(
-  process.env.AZURE_INFERENCE_SDK_ENDPOINT ?? "https://sneha-mcd1f0af-eastus2.services.ai.azure.com/models",
-  new AzureKeyCredential(process.env.AZURE_INFERENCE_SDK_KEY ?? "4mQRkbjL2SKKBKuCtS9FtyaZ5mMf2UPPqLVuSSUZgELFpLfwBmugJQQJ99BFACHYHv6XJ3w3AAAAACOGVKUq")
+  process.env.AZURE_INFERENCE_SDK_ENDPOINT ?? "endpoint",
+  new AzureKeyCredential(process.env.AZURE_INFERENCE_SDK_KEY ?? "your_api_key")
 );
 
 // Message prompt
