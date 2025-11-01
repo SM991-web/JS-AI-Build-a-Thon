@@ -18,7 +18,7 @@ jobs:
       - run: git config --global core.autocrlf false # Preserve line endings
       - uses: actions/checkout@v4
       - name: Setup Node.js v${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
